@@ -12,13 +12,10 @@ jobs:
     steps:
      -name: Checkout code
       uses: actions/checkout@v4
-
     -name: Build step
       run: echo "Building the application .."
-
     -name: Test step
       run: echo "Running tests..."
-
     -name: Deploying step
       run: echo "Deploying ..."
 
