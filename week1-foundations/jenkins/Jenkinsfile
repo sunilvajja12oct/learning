@@ -1,14 +1,39 @@
-   pipeline {
-       agent any
-       stages {
-           stage('Build') {
-               steps { echo 'Building the application...' }
-           }
-           stage('Test') {
-               steps { echo 'Running tests...' }
-           }
-           stage('Deploy') {
-               steps { echo 'Deploying...' }
-           }
-       }
-   }
+pipeline {
+    agent any
+    stages{
+        stage('Build'){
+            steps {
+                echo 'Building the application...'
+            }
+        }
+
+        stage('Build Info') {
+            steps {
+                script {
+                    def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
+                    echo "Build Started at ${buildTime}"
+
+                    def services = ['web', 'api', 'db']
+                    for (svc in services) {
+                        echo "Preparing services: ${svc}"
+                    }
+                }
+            }
+        }
+        stage('Security scan') {
+            steps {
+                sh 'docker run --rm aquasec/trivy image --exit-code 0 --severity HIGH,CRITICAL python:3.11-slim'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying ...'
+            }
+        }
+    }
+}
