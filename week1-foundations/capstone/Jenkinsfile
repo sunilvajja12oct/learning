@@ -6,9 +6,9 @@ pipeline {
                 sh 'docker build -t capstone-app week1-foundations/capstone'
             }
         }
-        stage ('Security scan') {
+        stage('Security Scan') {
             steps {
-                sh 'docker run --rm aquasec/trivy image --exit-code 0 --severity HIGH,CRITICAL capstone-app'
+                sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --exit-code 0 --severity HIGH,CRITICAL capstone-app'
             }
         }
         stage ('Deploy') {
