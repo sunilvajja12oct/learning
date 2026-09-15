@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 class HealthHandler(BaseHTTPRequestHandler):
@@ -13,6 +12,6 @@ class HealthHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
 if __name__ == "__main__":
-    server = HTTPServer(("0.0.0.0",8000), HealthHandler)
-    print("server on port 8000...")
-    server.server_forever()
+    server = HTTPServer(("0.0.0.0", 8000), HealthHandler)
+    print("Serving on port 8000...")
+    server.serve_forever()
