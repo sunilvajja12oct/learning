@@ -1,0 +1,32 @@
+name: Capstone Pipeline
+
+on:
+  push:
+    branches: [main, 'feature/**']
+
+jobs:
+  build-scan-deploy-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Image
+        run: docker build -t capstone-app ./week1-foundations/capstone
+
+      - name: security scan
+        run: docker run --rm aquasec/trivy image --exit-code 0 --severity HIGH,CRITICAL capstone-app
+
+      - name: Deploy container
+        run: |
+          docker run -d --name capstone-app-contaner -p 8000:8000 capstone-app
+          sleep 3
+
+      - name: Health check
+        run: |
+          chmod +x week1-foundation/capstone/healthcheck.sh
+          ./week1-foundations/capstone/healthcheck.sh
+
+      - name: cleanup
+        if: always()
+        run: docker rm -f capstone-app-container
