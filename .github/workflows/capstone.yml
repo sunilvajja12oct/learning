@@ -22,6 +22,12 @@ jobs:
           docker run -d --name capstone-app-contaner -p 8000:8000 capstone-app
           sleep 3
 
+      - name: Show container status (debug)
+        if: always()
+        run: |
+          docker ps -a
+          docker logs capstone-app-container || true
+
       - name: Health check
         run: |
           chmod +x week1-foundations/capstone/healthcheck.sh
