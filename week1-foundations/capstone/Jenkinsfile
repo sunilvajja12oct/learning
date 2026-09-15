@@ -14,10 +14,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'docker rm -f capstone-app-container || true'
-                sh 'docker run -d --name capstone-app-container -p 8000:8000 capstone-app'
+                sh 'docker run -d --name capstone-app-container --network ci-net -p 8000:8000 capstone-app'
                 sh '''
                     for i in $(seq 1 10); do
-                        if curl -s -o /dev/null http://127.0.0.1:8000/health; then
+                        if curl -s -o /dev/null http://capstone-app-container:8000/health; then
                             echo "Container is up after $i attempt(s)"
                             break
                         fi
@@ -30,7 +30,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'chmod +x week1-foundations/capstone/healthcheck.sh'
-                sh './week1-foundations/capstone/healthcheck.sh'
+                sh './week1-foundations/capstone/healthcheck.sh http://capstone-app-container:8000/health'
             }
         }
     }
