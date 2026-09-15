@@ -15,7 +15,7 @@ jobs:
         run: docker build -t capstone-app ./week1-foundations/capstone
 
       - name: Security scan
-        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --exit-code 0 --severity HIGH,CRITICAL capstone-app HIGH,CRITICAL capstone-app
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --exit-code 0 --severity HIGH,CRITICAL capstone-app
 
       - name: Deploy container
         run: |
