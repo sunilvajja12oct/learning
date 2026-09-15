@@ -1,12 +1,11 @@
 #!/bin/bash
-
-URL="${1:http://127.0.0.1:8000/health}"
+URL="${1:-http://127.0.0.1:8000/health}"
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)
 
 if [ "$STATUS" -eq 200 ]; then
-	echo "OK: $URL is up(status $STATUS)"
-	exit 0
+  echo "OK: $URL is up (status $STATUS)"
+  exit 0
 else
-	echo "FAIL: $URL returned status $STATUS"
-	exit 1
+  echo "FAIL: $URL returned status $STATUS"
+  exit 1
 fi
