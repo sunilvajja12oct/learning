@@ -11,15 +11,8 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v4
 
-      - name: set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and load image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./week1-foundations/capstone
-          load: true
-          tags: capstone-app
+      - name: Build Image
+        run: docker build -t capstone-app ./week1-foundations/capstone
 
       - name: security scan
         run: docker run --rm aquasec/trivy image --exit-code 0 --severity HIGH,CRITICAL capstone-app
@@ -31,7 +24,7 @@ jobs:
 
       - name: Health check
         run: |
-          chmod +x week1-foundations/capstone/healthcheck.sh
+          chmod +x week1-foundation/capstone/healthcheck.sh
           ./week1-foundations/capstone/healthcheck.sh
 
       - name: cleanup
