@@ -19,9 +19,16 @@ jobs:
 
       - name: Deploy container
         run: |
-          docker run -d --name capstone-app-contaner -p 8000:8000 capstone-app
-          sleep 3
-
+          docker run -d --name capstone-app-container -p 8000:8000 capstone-app
+          for i in $(seq 1 10); do
+            if curl -s -o /dev/null http://127.0.0.1:8000/health; then
+              echo "Container is up after $i attempt(s)"
+              break
+            fi
+            echo "Not ready yet, retry $i"
+            sleep 2
+          done
+          
       - name: Show container status (debug)
         if: always()
         run: |
